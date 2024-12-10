@@ -35,7 +35,7 @@ public class TeacherController : Controller
         // Declencher le mecanisme de validation
         if (!ModelState.IsValid)
         { 
-            return View();
+            return View();  
         }
         // Ajouter le teacher
         _teachers.Add(teacher);
