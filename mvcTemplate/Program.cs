@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
+using mvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     );
 
 
+builder.Services.AddIdentity<Teacher, IdentityRole>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    
+}).AddEntityFrameworkStores<ApplicationDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +35,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
 app.UseRouting();
 
 app.UseAuthorization();

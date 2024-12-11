@@ -1,23 +1,23 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
+using mvc.Data;
 using mvc.Models;
 
 public class TeacherController : Controller
 {
-    // liste d'enseignants
-    private static List<Teacher> _teachers = new List<Teacher>
+    private readonly UserManager<Teacher> _userManager;
+    public TeacherController(UserManager<Teacher> userManager)
     {
-        new Teacher { Id = 1, Lastname = "Doe", Firstname = "John" },
-        new Teacher { Id = 2, Lastname = "Smith", Firstname = "Jane" }
-    };
-
-
-    public IActionResult Index()
-    {
-        return View(_teachers);
+        _userManager = userManager;
     }
 
-    // Ecrire une liste d'Actions
+    public async Task<IActionResult> Index()
+    {
+        var teachers = await _userManager.Users.ToListAsync();
+        return View(teachers);
+    }
+
 
 
     // Ajouter un Teacher
@@ -28,58 +28,96 @@ public class TeacherController : Controller
         return View();
     }
 
+
     // Accessible via /Teacher/Add en POST ajoutera le teacher
     [HttpPost]
-    public IActionResult Add(Teacher teacher)
+    public async Task<IActionResult> Add(Teacher teacher)
     {
-        // Declencher le mecanisme de validation
-        if (!ModelState.IsValid)
-        { 
-            return View();  
+        if (teacher == null)
+        {
+            return BadRequest("Teacher object is null.");
         }
-        // Ajouter le teacher
-        _teachers.Add(teacher);
+
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
+        // Assurez-vous que le UserName est défini
+        teacher.UserName = teacher.Email;
+
+        var result = await _userManager.CreateAsync(teacher);
+        if (!result.Succeeded)
+        {
+            // Gérez les erreurs de création ici
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(teacher);
+        }
+
         return RedirectToAction("Index");
     }
 
-    // Supprimer un Teacher
-     [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            var etudiant = _teachers.FirstOrDefault(e => e.Id == id);
-            if (etudiant != null)
-            {
-                _teachers.Remove(etudiant);
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-    // Afficher le détail d'un teacher
-    // Accessible via /Teacher/ShowDetails/10
-    public IActionResult ShowDetails(int id)
+  [HttpPost]
+public async Task<IActionResult> Edit(string id, string Lastname, string Firstname, string Email, string PersonalWebSite)
+{
+    var teacher = await _userManager.FindByIdAsync(id);
+    if (teacher == null)
     {
-        Teacher teacher = new Teacher();
-        if (id == 10)
+        return NotFound();
+    }
+
+    teacher.Firstname = Firstname;
+    teacher.Lastname = Lastname;
+    teacher.Email = Email;
+    teacher.PersonalWebSite = PersonalWebSite;
+
+    var result = await _userManager.UpdateAsync(teacher);
+    if (!result.Succeeded)
+    {
+        return View("Error");
+    }
+
+    return RedirectToAction("Index");
+}
+
+    // Supprimer un Teacher 
+    public async Task<IActionResult> Delete(int id)
+    {
+        var teacher = await _userManager.FindByIdAsync(id.ToString());
+        if (teacher == null)
         {
-            teacher.Firstname = "John";
-            teacher.Lastname = "Doe";
-            teacher.Email = "johndoe@a.com";
-            teacher.PersonalWebSite = "www.jondoe.com ";
-            teacher.Id = 10;
+            return NotFound();
         }
-        else
-        {
-            teacher.Id = 20;
-            teacher.Firstname = "Jane";
-            teacher.Lastname = "Smith";
-            teacher.Email = "janesmith@a.com";
-            teacher.PersonalWebSite = "Www.janesmith.com";
-        }
+
         return View(teacher);
     }
 
-    // Afficher tous les Teachers
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        var teacher = await _userManager.FindByIdAsync(id.ToString());
+        if (teacher != null)
+        {
+            var result = await _userManager.DeleteAsync(teacher);
+            if (!result.Succeeded)
+            {
+                // Gérez les erreurs de suppression ici
+                return View("Error"); // Assurez-vous d'avoir une vue "Error"
+            }
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    // Afficher le détail d'un teacher
+    // Accessible via /Teacher/ShowDetails/10
+    public async Task<IActionResult> ShowDetails(string Id)
+    {
+        var teacher = await _userManager.FindByIdAsync(Id.ToString());
+        return View(teacher);
+    }
 
 }
