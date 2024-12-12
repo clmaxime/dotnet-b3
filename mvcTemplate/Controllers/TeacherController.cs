@@ -84,7 +84,7 @@ public async Task<IActionResult> Edit(string id, string Lastname, string Firstna
 }
 
     // Supprimer un Teacher 
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(string id)
     {
         var teacher = await _userManager.FindByIdAsync(id.ToString());
         if (teacher == null)
@@ -119,5 +119,6 @@ public async Task<IActionResult> Edit(string id, string Lastname, string Firstna
         var teacher = await _userManager.FindByIdAsync(Id.ToString());
         return View(teacher);
     }
+
 
 }

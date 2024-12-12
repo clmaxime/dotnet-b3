@@ -1,10 +1,25 @@
-@model IEnumerable<Student>
+@model IEnumerable<mvc.Models.Student>
 
-<h1>Bonjour depuis /Student/Index</h1>
-<p>Voici les informations de l'étudiant:</p>
-<ul>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Actions</th>
+    </tr>
     @foreach (var student in Model)
     {
-        <li>@student.Firstname @student.Lastname</li>
+        <tr>
+            <form asp-action="Edit" asp-controller="Student" method="post">
+                <td><input type="hidden" name="id" value="@student.Id" />@student.Id</td>
+                <td><input type="text" name="Firstname" value="@student.Firstname" /></td>
+                <td><input type="text" name="Lastname" value="@student.Lastname" /></td>
+                <td>
+                    <a asp-controller="Student" asp-action="ShowDetails" asp-route-id="@student.Id">Voir</a>
+                    <a asp-controller="Student" asp-action="Delete" asp-route-id="@student.Id">Supprimer</a>
+                    <button type="submit">Mettre à jour</button>
+                </td>
+            </form>
+        </tr>
     }
-</ul>
+</table>
