@@ -1,0 +1,29 @@
+﻿@model IEnumerable<mvc.Models.Teacher>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Site Web Personnel</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var teacher in Model)
+    {
+        <tr>
+            <form asp-action="Edit" asp-controller="Teacher" method="post">
+                <td><input type="hidden" name="id" value="@teacher.Id" />@teacher.Id</td>
+                <td><input type="text" name="Firstname" value="@teacher.Firstname" /></td>
+                <td><input type="text" name="Lastname" value="@teacher.Lastname" /></td>
+                <td><input type="email" name="Email" value="@teacher.Email" /></td>
+                <td><input type="text" name="PersonalWebSite" value="@teacher.PersonalWebSite" /></td>
+                <td>
+                    <a asp-controller="Teacher" asp-action="ShowDetails" asp-route-id="@teacher.Id">Voir</a>
+                    <a asp-controller="Teacher" asp-action="Delete" asp-route-id="@teacher.Id">Supprimer</a>
+                    <button type="submit">Mettre à jour</button>
+                </td>
+            </form>
+        </tr>
+    }
+</table>
