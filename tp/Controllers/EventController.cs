@@ -4,6 +4,7 @@ using mvc.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mvc.Controllers
 {
@@ -16,6 +17,7 @@ namespace mvc.Controllers
             _context = context;
         }
 
+
         // GET: EventController
         public async Task<IActionResult> Index()
         {
@@ -23,12 +25,14 @@ namespace mvc.Controllers
             return View(events);
         }
 
+[Authorize]
         // GET: EventController/Add
         public IActionResult Add()
         {
             return View();
         }
 
+[Authorize]
         // POST: EventController/Add
         [HttpPost]
         public async Task<IActionResult> Add(Event eventModel)
@@ -42,6 +46,7 @@ namespace mvc.Controllers
             return View(eventModel);
         }
 
+[Authorize]
         // GET: EventController/Delete/id
         public async Task<IActionResult> Delete(int id)
         {
@@ -53,6 +58,7 @@ namespace mvc.Controllers
             return View(eventModel);
         }
 
+[Authorize]
         // POST: EventController/DeleteConfirmed/id
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -66,6 +72,7 @@ namespace mvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         // GET: EventController/ShowDetails/id
         public async Task<IActionResult> ShowDetails(int id)
         {
@@ -77,6 +84,7 @@ namespace mvc.Controllers
             return View(eventModel);
         }
 
+[Authorize]
         // POST: EventController/Edit/id
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Event eventModel)

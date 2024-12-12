@@ -52,6 +52,7 @@ public class AccountController : Controller
         return View(model);
     }
 
+   
     [HttpGet]
     public IActionResult Login()
     {
@@ -64,7 +65,8 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
         {
             return View(model);
-        }   
+        }
+
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
         if (result.Succeeded)
@@ -75,4 +77,12 @@ public class AccountController : Controller
         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         return View(model);
     }
+    
+[HttpPost]
+public async Task<IActionResult> Logout()
+{
+    await _signInManager.SignOutAsync();
+    return RedirectToAction("Index", "Home");
+}
+
 }
