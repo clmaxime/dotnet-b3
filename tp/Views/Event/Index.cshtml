@@ -1,0 +1,47 @@
+@model IEnumerable<mvc.Models.Event>
+
+<h1>Liste des Événements</h1>
+
+<form asp-action="Edit" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date event</th>
+                <th>Max Participant</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var evt in Model)
+        {
+            <tr>
+                <td>
+                    <input asp-for="@evt.Title" name="Title" value="@evt.Title" class="form-control" />
+                    <input type="hidden" name="Id" value="@evt.Id" />
+                </td>
+                <td>
+                    <textarea asp-for="@evt.Description" name="Description" rows="1" class="form-control">@evt.Description</textarea>
+                </td>
+                <td>
+                    <input asp-for="@evt.EventDate" name="EventDate" value="@evt.EventDate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="@evt.MaxParticipants" name="MaxParticipants" value="@evt.MaxParticipants" class="form-control" />
+                </td>
+                <td>
+                    <input asp-for="@evt.Location" name="Location" value="@evt.Location" class="form-control" />
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <a asp-action="Delete" asp-route-id="@evt.Id" class="btn btn-danger">Supprimer</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</form>
+
+<a asp-action="Add" class="btn btn-success">Ajouter un Événement</a>

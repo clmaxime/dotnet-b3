@@ -9,7 +9,6 @@ public enum Major
 public class Student
 {
 
-    // ecrire des variables d'instance
     public int Id { get; set; }
     public string Firstname { get; set; }
     public string Lastname { get; set; }

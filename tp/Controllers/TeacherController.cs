@@ -21,7 +21,6 @@ public class TeacherController : Controller
 
 
     // Ajouter un Teacher
-    // Accessible via /Teacher/Add en GET affichera le formulaire
     [HttpGet]
     public IActionResult Add()
     {
@@ -29,7 +28,6 @@ public class TeacherController : Controller
     }
 
 
-    // Accessible via /Teacher/Add en POST ajoutera le teacher
     [HttpPost]
     public async Task<IActionResult> Add(Teacher teacher)
     {
@@ -43,13 +41,11 @@ public class TeacherController : Controller
             return View();
         }
 
-        // Assurez-vous que le UserName est défini
         teacher.UserName = teacher.Email;
 
         var result = await _userManager.CreateAsync(teacher);
         if (!result.Succeeded)
         {
-            // Gérez les erreurs de création ici
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -104,8 +100,7 @@ public async Task<IActionResult> Edit(string id, string Lastname, string Firstna
             var result = await _userManager.DeleteAsync(teacher);
             if (!result.Succeeded)
             {
-                // Gérez les erreurs de suppression ici
-                return View("Error"); // Assurez-vous d'avoir une vue "Error"
+                throw new Exception("error");
             }
         }
 
@@ -113,7 +108,6 @@ public async Task<IActionResult> Edit(string id, string Lastname, string Firstna
     }
 
     // Afficher le détail d'un teacher
-    // Accessible via /Teacher/ShowDetails/10
     public async Task<IActionResult> ShowDetails(string Id)
     {
         var teacher = await _userManager.FindByIdAsync(Id.ToString());

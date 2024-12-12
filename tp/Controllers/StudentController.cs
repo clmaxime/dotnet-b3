@@ -74,8 +74,6 @@ namespace mvc.Controllers
             return View(student);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Edit(int id, string Lastname, string Firstname, int Age, DateTime AdmissionDate)
         {

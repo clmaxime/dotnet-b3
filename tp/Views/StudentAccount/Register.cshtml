@@ -1,5 +1,5 @@
-@model AccountViewModel
-<h1>Création nouvel enseignant</h1>
+@model AccountViewModelStudent
+<h1>Création nouvel étudiant</h1>
 
 <form asp-action="Register" asp-controller="Account" method="post">
     <div class="form-group">
@@ -18,9 +18,9 @@
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="PersonalWebSite"></label> 
-        <input asp-for="PersonalWebSite" class="form-control" />
-        <span asp-validation-for="PersonalWebSite" class="text-danger"></span>
+        <label asp-for="Class"></label> 
+        <input asp-for="Class" class="form-control" />
+        <span asp-validation-for="Class" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Password"></label>
