@@ -17,7 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<Teacher>
     // c'est maintenant IdentityDbContext qui s'occupe de la table Teacher
 
     public DbSet<Student> Students { get; set; }
-
+    public DbSet<Event> Events { get; set; }
 
     // Constructeur de la classe
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

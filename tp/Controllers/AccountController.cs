@@ -5,7 +5,6 @@ using mvc.Models;
 public class AccountController : Controller
 {
     private readonly SignInManager<Teacher> _signInManager;
-
     private readonly UserManager<Teacher> _userManager;
 
     public AccountController(SignInManager<Teacher> signInManager, UserManager<Teacher> userManager)
@@ -19,7 +18,6 @@ public class AccountController : Controller
     {
         return View();
     }
-
 
     [HttpPost]
     public async Task<IActionResult> Register(AccountViewModel model)
@@ -51,6 +49,30 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, error.Description);
         }
 
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }   
+        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         return View(model);
     }
 }
