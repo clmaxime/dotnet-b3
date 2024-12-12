@@ -12,9 +12,9 @@ public class TeacherController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index()
+    public ActionResult Index()
     {
-        var teachers = await _userManager.Users.ToListAsync();
+        var teachers =  _userManager.Users.ToList();
         return View(teachers);
     }
 
